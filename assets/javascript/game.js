@@ -1,34 +1,51 @@
-var wordArray = ["CAT", "DOG", "FISH", "COW", "SHEEP"];
-//playword spits out a random string(word) of the array words
-var playWord = wordArray[Math.floor(Math.random() * wordArray.length)];
-console.log(playWord);
+var wordArray = ['cat', 'dog', 'sheep', 'crow', 'cow', 'pig', 'racoon'];
+var randomWord = wordArray[Math.floor(Math.random() * wordArray.length)];
+console.log(randomWord);
+var answerArray = [];
+var playerGuess;
+var score = 0;
+var letterCount = randomWord.length;
+var playerGuess;
+var guessCanvas = "";
+console.log("guesscanvas: " + guessCanvas)
 
-var emptyArray = [];
-
-for (var i = 0; i< playWord.length; i++) {
-  emptyArray[i] = "*";
+for (var i = 0; i < randomWord.length; i++) {
+  answerArray[i] = "*";
+  document.getElementById("demo").innerHTML = answerArray.join(" ");
 }
+console.log("answerArray: " + answerArray)
 
-var us = document.getElementById('ldisplay');
-us.innerHTML = emptyArray;
+document.getElementById("score").innerHTML = score;
+
+
+
+var guessed;
+
+
 
 document.onkeyup = function(event) {
 
-    var keyPress = String.fromCharCode(event.keyCode);
-    var parsedString = playWord.split("")
-        console.log(parsedString);
-    var ans = parsedString.indexOf(keyPress);
-    console.log(ans + " index number");
-    console.log(parsedString[ans] + " parsedString[ans]");
-
-    if (parsedString[ans] == keyPress) {
-      console.log("hooray it matches")
-      document.getElementById('uletters').innerHTML += keyPress;
+  playerGuess = event.key;
+  guessed = guessCanvas.includes(playerGuess);
+  console.log("guessed boolean: " + guessed);
+  console.log("Guess Canvas " + guessCanvas);
+  guessCanvas = guessCanvas + event.key;
+//if guess is true do not execute this
+if (guessed === false){
+  for (var i = 0; i < randomWord.length; i++) {
+    if (randomWord[i] == playerGuess) {
+      answerArray[i] = playerGuess;
+      console.log("randomWord indexed letter: " + randomWord[i]);
+      console.log("answerArray status: " + answerArray[i]);
+      document.getElementById("demo").innerHTML = answerArray.join(" ");
+      letterCount--;
+      console.log("letterCount: " + letterCount);
     }
-
-    else {
-      console.log ("wrong")
-      document.getElementById('wguess').innerHTML += keyPress;
-    }
-
   }
+}
+  if (letterCount == 0) {
+    score++;
+  }
+  document.getElementById("score").innerHTML = score;
+
+}
