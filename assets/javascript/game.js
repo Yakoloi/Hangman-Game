@@ -1,3 +1,5 @@
+
+
 document.getElementById("message").innerHTML = "Welcome to Word Barn Press Enter to Start";
 var gameStart = false;
 var pause = true;
@@ -14,6 +16,7 @@ document.addEventListener("keyup", function(start) {
 });
 
 //global variables//
+var images = ["images/cat.jpg"]
 var wordArray = ["cat", "dog", "sheep", "crow", "cow", "pig", "racoon", "chicken", "goat", "horse"];
 var randomWord;
 var answerArray = [];
