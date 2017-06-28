@@ -1,3 +1,4 @@
+document.getElementById("message").innerHTML = "Welcome to Word Barn Press Enter to Start";
 var gameStart = false;
 var pause = true;
 //game start function press enter to start//
@@ -13,7 +14,7 @@ document.addEventListener("keyup", function(start) {
 });
 
 //global variables//
-var wordArray = ["cat", "dog", "sheep", "crow", "cow", "pig", "racoon"];
+var wordArray = ["cat", "dog", "sheep", "crow", "cow", "pig", "racoon", "chicken", "goat", "horse"];
 var randomWord;
 var answerArray = [];
 var keyPress;
@@ -26,6 +27,8 @@ var match;
 var winState;
 
 function initialize() {
+  document.getElementById("message").innerHTML = "enter a letter";
+  document.getElementById("guesses").innerHTML = "Guessed letters: ";
   randomWord = wordArray[Math.floor(Math.random() * wordArray.length)];
   letterCount = randomWord.length;
   answerArray = [];
@@ -34,18 +37,19 @@ function initialize() {
   guessed = [];
   lives = 5;
   guessed = false;
+  pause = false;
   console.log("randomWord: " + randomWord);
   console.log("lettercount: " + letterCount);
   for (var i = 0; i < letterCount; i++) {
     answerArray[i] = "*";
     document.getElementById("mask").innerHTML = answerArray.join(" ");
   }
-  document.getElementById("score").innerHTML = score;
-  document.getElementById("lives").innerHTML = lives;
+  document.getElementById("score").innerHTML = "Score: " + score;
+  document.getElementById("lives").innerHTML = "Lives: " + lives;
 }
 
 document.onkeyup = function(guessFun) {
-  if (guessFun.keyCode > 64 && guessFun.keyCode < 91) {
+  if (guessFun.keyCode > 64 && guessFun.keyCode < 91 && pause === false) {
     keyPress = guessFun.key;
     console.log("keyPress: " + keyPress);
     wordCheck();
@@ -64,9 +68,10 @@ function wordCheck() {
 function compare() {
   if (guessed === false) {
     guessCanvas = guessCanvas + keyPress;
+    document.getElementById("guesses").innerHTML ="Guessed letters: " + guessCanvas;
     matchCheck();
   } else {
-    console.log("you already guessed that!");
+    document.getElementById("message").innerHTML = "You already guessed that letter";
   }
 }
 
@@ -78,6 +83,7 @@ function matchCheck() {
 
 function replaceLetter() {
   if (match === true) {
+    document.getElementById("message").innerHTML = "Good answer";
     for (var i = 0; i < randomWord.length; i++) {
       if (randomWord[i] === keyPress) {
         answerArray[i] = keyPress;
@@ -89,7 +95,17 @@ function replaceLetter() {
     }
   } else {
     lives--;
-    document.getElementById("lives").innerHTML = lives;
+    document.getElementById("message").innerHTML = "Wrong answer";
+    document.getElementById("lives").innerHTML = "Lives: " + lives;
+    lossCheck();
+  }
+}
+
+function lossCheck(){
+  if (lives <= 0 ){
+    score = 0;
+    document.getElementById("score").innerHTML = "Score: " + score;
+    resetLoss();
   }
 }
 
@@ -101,8 +117,25 @@ function maskCheck() {
 function winCheck() {
   if (answerMaskOn === false) {
     score++;
-    document.getElementById("score").innerHTML = score;
+
+    document.getElementById("score").innerHTML = "Score: " + score;
     console.log("Congratulation!");
-    pause();
+    resetWin();
   }
+}
+
+function resetWin() {
+  pause = true;
+  document.getElementById("message").innerHTML = "Congraulations You win!";
+  setTimeout(function() {
+    initialize();
+  }, 3000);
+}
+
+function resetLoss() {
+  pause = true;
+  document.getElementById("message").innerHTML = "Game over!";
+  setTimeout(function() {
+    initialize();
+  }, 3000);
 }
